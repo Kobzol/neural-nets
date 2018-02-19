@@ -25,18 +25,21 @@
                 <value>7.0</value>
                 <value>9.0</value>
             </inputs>
+            <output>0.0</output>
         </element>
         <element>
             <inputs>
                 <value>9.0</value>
                 <value>7.0</value>
             </inputs>
+            <output>1.0</output>
         </element>
         <element>
             <inputs>
                 <value>2.0</value>
                 <value>2.0</value>
             </inputs>
+            <output>1.0</output>
         </element>
     </TestSet>
     <TrainSet>

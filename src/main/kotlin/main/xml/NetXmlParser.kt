@@ -7,8 +7,8 @@ class NetXmlParser
 {
     private val serializer = Persister()
 
-    fun parsePerceptronTask(path: Path)
+    fun parsePerceptronTask(path: Path): PerceptronTaskDto
     {
-        val data = this.serializer.read(PerceptronTaskDto::class.java, path.toFile())
+        return this.serializer.read(PerceptronTaskDto::class.java, path.toFile())
     }
 }

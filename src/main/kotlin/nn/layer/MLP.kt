@@ -5,7 +5,8 @@ import java.util.*
 
 class MLP(private val inputSize: Int,
           neuronCount: Int,
-          private val activation: Activation) : Layer
+          private val activation: Activation,
+          private val initializer: (inputSize: Int) -> Float) : Layer
 {
     override val outputs = FloatArray(neuronCount)
     override val biases = FloatArray(neuronCount)
@@ -30,14 +31,11 @@ class MLP(private val inputSize: Int,
 
     private fun initialize()
     {
-        val random = Random()
-        val deviance = Math.sqrt(this.inputSize.toDouble())
-
         for (i in this.outputs.indices)
         {
             for (j in 0 until this.inputSize)
             {
-                this.weights[i * this.inputSize + j] = (random.nextGaussian() * deviance).toFloat()
+                this.weights[i * this.inputSize + j] = this.initializer(this.inputSize)
             }
         }
     }

@@ -6,16 +6,19 @@ class NetBuilder
 {
     private val layers = mutableListOf<(Int) -> Layer>()
 
-    public fun add(layerCreator: (Int) -> Layer)
+    fun add(layerCreator: (Int) -> Layer): NetBuilder
     {
         this.layers += layerCreator
-    }
-    public fun add(layer: Layer)
-    {
-        this.layers += { layer }
+        return this
     }
 
-    public fun build(inputSize: Int): Net
+    fun add(layer: Layer): NetBuilder
+    {
+        this.layers += { layer }
+        return this
+    }
+
+    fun build(inputSize: Int): Net
     {
         val layers = mutableListOf<Layer>()
         var size = inputSize
