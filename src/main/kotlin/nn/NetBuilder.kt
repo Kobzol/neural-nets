@@ -1,6 +1,9 @@
 package nn
 
+import nn.activation.Signum
 import nn.layer.Layer
+import nn.layer.Perceptron
+import java.util.*
 
 class NetBuilder
 {
@@ -27,9 +30,22 @@ class NetBuilder
         {
             val layer = creator(size)
             layers += layer
-            size = layer.outputs.size
+            size = layer.neuronCount
         }
 
         return Net(layers)
     }
+}
+
+fun createHebbNet(inputSize: Int): Net
+{
+    return NetBuilder()
+            .add { s -> Perceptron(s, 1, Signum(), createNormalInitializer(0.5, 0.5)) }
+            .build(inputSize)
+}
+
+fun createNormalInitializer(mean: Double = 0.0, variance: Double = 1.0): (Int) -> Float
+{
+    val random = Random()
+    return { (random.nextGaussian() * variance + mean).toFloat() }
 }

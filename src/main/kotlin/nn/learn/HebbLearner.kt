@@ -5,33 +5,32 @@ import nn.Net
 class HebbLearner(private val net: Net,
                   private var learningRate: Float)
 {
-    fun learnSample(input: FloatArray, groundTruth: FloatArray)
+    fun learnSample(input: FloatArray, output: FloatArray)
     {
         val layer = this.net.layers[0]
-        layer.forward(input)
 
-        val change = layer.outputs
-                .zip(groundTruth)
-                .map { pair -> pair.second - pair.first }
+        val change = layer.activation.forward(layer.forward(input))
+                .zip(output)
+                .map { (activation, expected) -> expected - activation }
                 .map { it * this.learningRate }
 
-        for (o in layer.outputs.indices)
+        for (o in change.indices)
         {
             for (i in input.indices)
             {
-                layer.weights[o * input.size + i] += change[o] * input[i]
+                layer.getWeights(o)[i] += change[o] * input[i]
             }
         }
 
-        layer.biases.mapIndexed { index, value ->
+        layer.biases.mapIndexed { index, _ ->
             layer.biases[index] += change[index]
         }
     }
 
-    fun learnBatch(inputs: List<FloatArray>, groundTruth: List<FloatArray>)
+    fun learnBatch(inputs: List<FloatArray>, outputs: List<FloatArray>)
     {
-        inputs.zip(groundTruth).forEach {
-            this.learnSample(it.first, it.second)
+        inputs.zip(outputs).forEach { (input, output) ->
+            this.learnSample(input, output)
         }
     }
 }

@@ -4,32 +4,22 @@ import javafx.geometry.Point2D
 import javafx.scene.control.Button
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
-import main.geom.Line
 import main.gui.LossChart
 import main.gui.PointCanvas
 import main.xml.PerceptronTaskDto
 import nn.Net
-import nn.NetBuilder
-import nn.activation.Signum
-import nn.layer.MLP
+import nn.createHebbNet
 import nn.learn.HebbLearner
-import java.util.*
 
 class MainScreen(private val perceptronTask: PerceptronTaskDto) : VBox()
 {
     private val canvas = PointCanvas(300.0, 300.0)
     private val lossChart = LossChart("Iteration", "Loss")
-    private var net: Net
+    private var net: Net = createHebbNet(perceptronTask.perceptron.data.size)
     private var learner: HebbLearner
 
     init
     {
-        val builder = NetBuilder()
-        val random = Random()
-        builder.add { s -> MLP(s, 1, Signum(), { inputSize ->
-            (random.nextGaussian() * 0.5  + 0.5).toFloat()
-        }) }
-        this.net = builder.build(perceptronTask.perceptron.data.size)
         this.learner = HebbLearner(this.net, 0.01f)
 
         val learnBtn = Button("Learn one step")
@@ -73,6 +63,6 @@ class MainScreen(private val perceptronTask: PerceptronTaskDto) : VBox()
             )
         }
 
-        this.canvas.drawNet(this.net)
+        this.canvas.drawHebbNet(this.net)
     }
 }

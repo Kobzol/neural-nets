@@ -16,11 +16,15 @@ apply plugin: 'kotlin'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.simpleframework:simple-xml:2.7.1"
+
+    testCompile "org.junit.jupiter:junit-jupiter-api:5.1.0"
+    testCompile "org.amshove.kluent:kluent:1.34"
 }
 
 compileKotlin {

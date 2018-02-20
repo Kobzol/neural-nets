@@ -9,8 +9,7 @@ class Net(val layers: List<Layer>)
         var data = inputs
         for (layer in this.layers)
         {
-            layer.forward(data)
-            data = layer.outputs
+            data = layer.activation.forward(layer.forward(data))
         }
 
         return data
@@ -20,7 +19,7 @@ class Net(val layers: List<Layer>)
     {
         return inputs.mapIndexed { index, input ->
             outputs[index].zip(this.feedForward(input))
-                .map { p -> Math.pow((p.first - p.second).toDouble(), 2.0) }
+                .map { (label, activation) -> Math.pow((label - activation).toDouble(), 2.0) }
                 .sum()
         }.sum().toFloat()
     }
