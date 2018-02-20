@@ -17,11 +17,16 @@ apply plugin: 'kotlin'
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url "http://dl.bintray.com/kyonifer/maven"
+    }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.simpleframework:simple-xml:2.7.1"
+    compile "koma:core:0.11"
+    compile "koma:backend-matrix-ejml:0.11"
 
     testCompile "org.junit.jupiter:junit-jupiter-api:5.1.0"
     testCompile "org.amshove.kluent:kluent:1.34"

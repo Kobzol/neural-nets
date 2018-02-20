@@ -1,28 +1,27 @@
 package nn.layer
 
+import koma.extensions.set
+import koma.matrix.Matrix
+import koma.matrix.MatrixTypes
+import koma.zeros
 import nn.activation.Activation
-import nn.math.dot
 
 class Perceptron(override val inputSize: Int,
                  override val neuronCount: Int,
                  override val activation: Activation,
                  private val initializer: (inputSize: Int) -> Float) : Layer
 {
-    override val biases = FloatArray(neuronCount)
-    private val weights = List(neuronCount, { FloatArray(inputSize) })
+    override var biases = zeros(1, neuronCount, MatrixTypes.FloatType)
+    override var weights = zeros(neuronCount, inputSize, MatrixTypes.FloatType)
 
     init
     {
         this.initialize()
     }
 
-    override fun getWeights(neuron: Int): FloatArray = this.weights[neuron]
-
-    override fun forward(data: FloatArray): FloatArray
+    override fun forward(data: Matrix<Float>): Matrix<Float>
     {
-        return (0 until this.neuronCount).map { neuron ->
-            dot(this.weights[neuron], data) + this.biases[neuron]
-        }.toFloatArray()
+        return (data * this.weights.transpose()) + this.biases
     }
 
     private fun initialize()
@@ -31,7 +30,7 @@ class Perceptron(override val inputSize: Int,
         {
             for (j in 0 until this.inputSize)
             {
-                this.getWeights(i)[j] = this.initializer(this.inputSize)
+                this.weights[i, j] = this.initializer(this.inputSize)
             }
             this.biases[i] = this.initializer(1)
         }

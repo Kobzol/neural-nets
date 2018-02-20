@@ -2,6 +2,7 @@ import nn.Net
 import nn.activation.Activation
 import nn.activation.Sigmoid
 import nn.layer.Perceptron
+import nn.toVec
 import org.amshove.kluent.`should be less or equal to`
 import org.amshove.kluent.mock
 import org.amshove.kluent.shouldBeLessOrEqualTo
@@ -18,8 +19,8 @@ class NetTest
         )))
 
         Math.abs(net.getLoss(
-                listOf(floatArrayOf(0.2f, 0.1f), floatArrayOf(0.5f, 0.8f)),
-                listOf(floatArrayOf(0.3f, 0.6f), floatArrayOf(0.4f, 0.2f))
-        ) - 0.3352) shouldBeLessOrEqualTo 0.00001
+                listOf(toVec(floatArrayOf(0.2f, 0.1f)), toVec(floatArrayOf(0.5f, 0.8f))),
+                listOf(toVec(floatArrayOf(0.3f, 0.6f)), toVec(floatArrayOf(0.4f, 0.2f)))
+        ) - 0.573f) shouldBeLessOrEqualTo 0.00001f
     }
 }

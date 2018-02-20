@@ -1,16 +1,19 @@
 package nn.activation
 
+import koma.extensions.map
+import nn.DataVector
+
 abstract class Activation
 {
     abstract fun forward(input: Float): Float
     abstract fun backward(input: Float): Float
 
-    fun forward(input: FloatArray): FloatArray
+    fun forward(input: DataVector): DataVector
     {
-        return input.map { this.forward(it) }.toFloatArray()
+        return input.map { this.forward(it) }
     }
-    fun backward(input: FloatArray): FloatArray
+    fun backward(input: DataVector): DataVector
     {
-        return input.map { this.backward(it) }.toFloatArray()
+        return input.map { this.backward(it) }
     }
 }

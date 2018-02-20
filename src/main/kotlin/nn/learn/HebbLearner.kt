@@ -1,36 +1,26 @@
 package nn.learn
 
+import nn.DataVector
 import nn.Net
 
 class HebbLearner(private val net: Net,
                   private var learningRate: Float)
 {
-    fun learnSample(input: FloatArray, output: FloatArray)
+    fun learnSample(input: DataVector, label: DataVector)
     {
         val layer = this.net.layers[0]
+        val output = layer.activation.forward(layer.forward(input))
+        val diff = (label - output) * this.learningRate
+        val deltas = diff * input
 
-        val change = layer.activation.forward(layer.forward(input))
-                .zip(output)
-                .map { (activation, expected) -> expected - activation }
-                .map { it * this.learningRate }
-
-        for (o in change.indices)
-        {
-            for (i in input.indices)
-            {
-                layer.getWeights(o)[i] += change[o] * input[i]
-            }
-        }
-
-        layer.biases.mapIndexed { index, _ ->
-            layer.biases[index] += change[index]
-        }
+        layer.weights += deltas
+        layer.biases += diff
     }
 
-    fun learnBatch(inputs: List<FloatArray>, outputs: List<FloatArray>)
+    fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
     {
-        inputs.zip(outputs).forEach { (input, output) ->
-            this.learnSample(input, output)
+        inputs.zip(labels).forEach { (input, label) ->
+            this.learnSample(input, label)
         }
     }
 }

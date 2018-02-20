@@ -1,12 +1,10 @@
 import nn.NetBuilder
 import nn.activation.Sigmoid
-import nn.createHebbNet
 import nn.createNormalInitializer
 import nn.layer.Perceptron
 import nn.learn.BackpropLearner
-import nn.learn.HebbLearner
+import nn.toVec
 import org.amshove.kluent.shouldEqual
-import org.amshove.kluent.shouldNotEqual
 import org.junit.jupiter.api.Test
 
 class BackpropTest
@@ -25,13 +23,13 @@ class BackpropTest
                 floatArrayOf(0.0f, 1.0f),
                 floatArrayOf(1.0f, 0.0f),
                 floatArrayOf(1.0f, 1.0f)
-        )
+        ).map { toVec(it) }
         val outputs = listOf(
                 floatArrayOf(0.0f),
                 floatArrayOf(1.0f),
                 floatArrayOf(1.0f),
                 floatArrayOf(0.0f)
-        )
+        ).map { toVec(it) }
 
         for (i in 0 until 50000)
         {

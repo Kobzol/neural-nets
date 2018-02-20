@@ -4,6 +4,7 @@ import javafx.geometry.Point2D
 import javafx.scene.canvas.Canvas
 import javafx.scene.paint.Color
 import javafx.scene.paint.Paint
+import koma.extensions.get
 import main.geom.Line
 import nn.Net
 
@@ -55,8 +56,8 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
     fun drawHebbNet(net: Net)
     {
         val layer = net.layers[0]
-        val a = layer.getWeights(0)[0]
-        val b = layer.getWeights(0)[1]
+        val a = layer.weights[0, 0]
+        val b = layer.weights[0, 1]
         val c = layer.biases[0]
 
         this.drawLine(Line(a, b, c))

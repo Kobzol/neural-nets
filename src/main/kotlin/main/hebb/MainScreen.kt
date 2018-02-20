@@ -20,27 +20,22 @@ class MainScreen(private val perceptronTask: PerceptronTaskDto) : VBox()
 
     init
     {
-        this.learner = HebbLearner(this.net, 0.01f)
+        this.learner = HebbLearner(this.net, 0.05f)
 
         val learnBtn = Button("Learn one step")
         learnBtn.setOnAction {
             val trainSet = this.perceptronTask.trainSet
             val testSet = this.perceptronTask.testSet
+            val trainInputs = trainSet.inputs()
+            val trainLabels = trainSet.outputs()
 
-            this.learner.learnBatch(
-                    trainSet.elements.map { it.inputs.values.toFloatArray() },
-                    trainSet.elements.map { floatArrayOf(it.output) }
-            )
+            this.learner.learnBatch(trainInputs, trainLabels)
             this.draw()
-            val trainErr = this.net.getLoss(
-                    trainSet.elements.map { it.inputs.values.toFloatArray() },
-                    trainSet.elements.map { floatArrayOf(it.output) }
-            )
+
+            val trainErr = this.net.getLoss(trainInputs, trainLabels)
             this.lossChart.addPoint("Train", trainErr)
-            val testErr = this.net.getLoss(
-                    testSet.elements.map { it.inputs.values.toFloatArray() },
-                    testSet.elements.map { floatArrayOf(it.output) }
-            )
+
+            val testErr = this.net.getLoss(testSet.inputs(), testSet.outputs())
             this.lossChart.addPoint("Test", testErr)
         }
 

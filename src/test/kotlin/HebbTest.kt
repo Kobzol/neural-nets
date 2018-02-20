@@ -1,5 +1,6 @@
 import nn.createHebbNet
 import nn.learn.HebbLearner
+import nn.toVec
 import org.amshove.kluent.shouldEqual
 import org.amshove.kluent.shouldNotEqual
 import org.junit.jupiter.api.Test
@@ -16,13 +17,13 @@ class HebbTest
                 floatArrayOf(0.0f, 1.0f),
                 floatArrayOf(1.0f, 0.0f),
                 floatArrayOf(1.0f, 1.0f)
-        )
+        ).map { toVec(it) }
         val outputs = listOf(
                 floatArrayOf(0.0f),
                 floatArrayOf(0.0f),
                 floatArrayOf(0.0f),
                 floatArrayOf(1.0f)
-        )
+        ).map { toVec(it) }
 
         for (i in 0 until 20)
         {
@@ -42,13 +43,13 @@ class HebbTest
                 floatArrayOf(0.0f, 1.0f),
                 floatArrayOf(1.0f, 0.0f),
                 floatArrayOf(1.0f, 1.0f)
-        )
+        ).map { toVec(it) }
         val outputs = listOf(
                 floatArrayOf(0.0f),
                 floatArrayOf(1.0f),
                 floatArrayOf(1.0f),
                 floatArrayOf(1.0f)
-        )
+        ).map { toVec(it) }
 
         for (i in 0 until 20)
         {
@@ -68,13 +69,13 @@ class HebbTest
                 floatArrayOf(0.0f, 1.0f),
                 floatArrayOf(1.0f, 0.0f),
                 floatArrayOf(1.0f, 1.0f)
-        )
+        ).map { toVec(it) }
         val outputs = listOf(
                 floatArrayOf(0.0f),
                 floatArrayOf(1.0f),
                 floatArrayOf(1.0f),
                 floatArrayOf(0.0f)
-        )
+        ).map { toVec(it) }
 
         for (i in 0 until 500)
         {

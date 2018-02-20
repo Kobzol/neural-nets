@@ -1,63 +1,58 @@
 package nn.learn
 
+import koma.matrix.MatrixTypes
+import koma.zeros
+import nn.DataVector
 import nn.Net
-import nn.math.sum
 
 class BackpropLearner(private val net: Net,
                       private var learningRate: Float)
 {
-    fun learnBatch(inputs: List<FloatArray>, labels: List<FloatArray>)
+    fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
     {
-        val weightDeltas = this.net.layers.map { layer ->
-            MutableList(layer.neuronCount, { FloatArray(layer.inputSize) })
-        }.toList()
-        val biasDeltas = this.net.layers.map { FloatArray(it.neuronCount) }.toMutableList()
+        val weightDeltas = this.net.layers.map {
+            zeros(it.neuronCount, it.inputSize, MatrixTypes.FloatType)
+        }.toMutableList()
+        val biasDeltas = this.net.layers.map {
+            zeros(1, it.neuronCount, MatrixTypes.FloatType)
+        }.toMutableList()
 
         for ((input, label) in inputs.zip(labels))
         {
             val (weightDelta, biasDelta) = this.learnSample(input, label)
             for (layer in weightDeltas.indices)
             {
-                for (neuron in weightDeltas[layer].indices)
-                {
-                    weightDeltas[layer][neuron] = sum(weightDelta[layer][neuron], weightDeltas[layer][neuron])
-                }
+                weightDeltas[layer] += weightDelta[layer]
             }
-            biasDelta.forEachIndexed { index, value ->
-                biasDeltas[index] = sum(biasDeltas[index], value)
+            for (layer in biasDeltas.indices)
+            {
+                biasDeltas[layer] += biasDelta[layer]
             }
         }
 
         // apply biases
-        biasDeltas.zip(this.net.layers).forEach { (delta, layer) ->
-            for (i in layer.biases.indices)
-            {
-                layer.biases[i] -= this.learningRate * delta[i]
-            }
+        for (layer in biasDeltas.indices)
+        {
+            this.net.layers[layer].biases -= biasDeltas[layer].times(this.learningRate)
         }
 
         // apply weights
-        weightDeltas.zip(this.net.layers).forEach { (delta, layer) ->
-            for (neuron in 0 until layer.neuronCount)
-            {
-                for (input in 0 until layer.inputSize)
-                {
-                    layer.getWeights(neuron)[input] -= this.learningRate *  delta[neuron][input]
-                }
-            }
+        for (layer in weightDeltas.indices)
+        {
+            this.net.layers[layer].weights -= weightDeltas[layer].times(this.learningRate)
         }
     }
 
-    private fun learnSample(features: FloatArray, label: FloatArray): Pair<List<List<FloatArray>>, List<FloatArray>>
+    private fun learnSample(features: DataVector, label: DataVector): Pair<List<DataVector>, List<DataVector>>
     {
         val (outputs, activations) = this.feedForward(features)
 
         // derivation of L2 loss function
-        var delta = outputs.last().zip(label).mapIndexed { index, (output, label) ->
-            (activations.last()[index] - label) * this.net.layers.last().activation.backward(output)
-        }.toFloatArray()
+        var delta = (activations.last() - label)
+                .elementTimes(this.net.layers.last().activation.backward(outputs.last()))
+
         val biasDeltas = mutableListOf(delta)
-        val weightDeltas = mutableListOf(deltaToWeightDelta(delta, activations[activations.size - 2]))
+        val weightDeltas = mutableListOf(delta.transpose() * activations[activations.size - 2])
 
         for (i in this.net.layers.size - 2 downTo 0)
         {
@@ -65,21 +60,17 @@ class BackpropLearner(private val net: Net,
             val layer = this.net.layers[i]
             val nextLayer = this.net.layers[i + 1]
             val derivedActivation = layer.activation.backward(output)
-            delta = (0 until layer.neuronCount).map { input ->
-                delta.mapIndexed { index, value ->
-                    value * nextLayer.getWeights(index)[input] * derivedActivation[input]
-                }.sum()
-            }.toFloatArray()
+            delta = (delta * nextLayer.weights).elementTimes(derivedActivation)
             biasDeltas.add(0, delta)
-            weightDeltas.add(0, this.deltaToWeightDelta(delta, activations[i]))
+            weightDeltas.add(0, delta.transpose() * activations[i])
         }
 
         return Pair(weightDeltas, biasDeltas)
     }
 
-    private fun feedForward(input: FloatArray): Pair<MutableList<FloatArray>, MutableList<FloatArray>>
+    private fun feedForward(input: DataVector): Pair<List<DataVector>, List<DataVector>>
     {
-        val outputs = mutableListOf<FloatArray>()
+        val outputs = mutableListOf<DataVector>()
         val activations = mutableListOf(input)
         var activation = input
 
@@ -91,12 +82,5 @@ class BackpropLearner(private val net: Net,
             activations += activation
         }
         return Pair(outputs, activations)
-    }
-    private fun deltaToWeightDelta(delta: FloatArray, activation: FloatArray): List<FloatArray>
-    {
-        return delta.map { activation
-                .map { a -> a * it }
-                .toFloatArray()
-        }.toList()
     }
 }

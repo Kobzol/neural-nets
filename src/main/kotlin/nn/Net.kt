@@ -1,10 +1,13 @@
 package nn
 
+import koma.matrix.Matrix
 import nn.layer.Layer
+
+typealias DataVector = Matrix<Float>
 
 class Net(val layers: List<Layer>)
 {
-    fun feedForward(inputs: FloatArray): FloatArray
+    fun forward(inputs: DataVector): DataVector
     {
         var data = inputs
         for (layer in this.layers)
@@ -15,12 +18,12 @@ class Net(val layers: List<Layer>)
         return data
     }
 
-    fun getLoss(inputs: List<FloatArray>, outputs: List<FloatArray>): Float
+    fun getLoss(inputs: List<DataVector>, labels: List<DataVector>): Float
     {
-        return inputs.mapIndexed { index, input ->
-            outputs[index].zip(this.feedForward(input))
-                .map { (label, activation) -> Math.pow((label - activation).toDouble(), 2.0) }
-                .sum()
-        }.sum().toFloat()
+        return inputs.zip(labels).map { (input, label) ->
+            val output = this.forward(input)
+            val diff = label - output
+            diff.elementTimes(diff).elementSum()
+        }.sum()
     }
 }
