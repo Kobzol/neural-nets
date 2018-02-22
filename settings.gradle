@@ -1,1 +1,2 @@
 rootProject.name = 'neural_nets'
+include ':app', ':bia'

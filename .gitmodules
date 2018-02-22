@@ -1,0 +1,3 @@
+[submodule "bia"]
+	path = bia
+	url = https://github.com/kobzol/bia
