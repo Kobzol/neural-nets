@@ -1,7 +1,7 @@
 package nn.learn
 
-import koma.matrix.MatrixTypes
-import koma.zeros
+import koma.matrix.Matrix
+import koma.matrix.ejml.EJMLMatrixFactory
 import nn.DataVector
 import nn.Net
 
@@ -11,10 +11,10 @@ class BackpropLearner(private val net: Net,
     fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
     {
         val weightDeltas = this.net.layers.map {
-            zeros(it.neuronCount, it.inputSize, MatrixTypes.FloatType)
+            EJMLMatrixFactory().zeros(it.neuronCount, it.inputSize) as Matrix<Double>
         }.toMutableList()
         val biasDeltas = this.net.layers.map {
-            zeros(1, it.neuronCount, MatrixTypes.FloatType)
+            EJMLMatrixFactory().zeros(1, it.neuronCount) as Matrix<Double>
         }.toMutableList()
 
         for ((input, label) in inputs.zip(labels))
@@ -33,13 +33,13 @@ class BackpropLearner(private val net: Net,
         // apply biases
         for (layer in biasDeltas.indices)
         {
-            this.net.layers[layer].biases -= biasDeltas[layer].times(this.learningRate)
+            this.net.layers[layer].biases -= biasDeltas[layer].times(this.learningRate.toDouble())
         }
 
         // apply weights
         for (layer in weightDeltas.indices)
         {
-            this.net.layers[layer].weights -= weightDeltas[layer].times(this.learningRate)
+            this.net.layers[layer].weights -= weightDeltas[layer].times(this.learningRate.toDouble())
         }
     }
 

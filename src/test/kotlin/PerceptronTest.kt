@@ -26,19 +26,19 @@ class PerceptronTest
             override fun backward(input: Float): Float = input
         }, { _ -> 0.5f })
 
-        layer.weights[0, 0] = 0.56f
-        layer.weights[0, 1] = 0.9f
-        layer.weights[0, 2] = -0.08f
-        layer.weights[0, 2] = 0.12f
-        layer.weights[2, 1] = 0.18f
-        layer.weights[3, 2] = -0.25f
-        layer.weights[1, 1] = 0.4f
-        layer.weights[2, 0] = -0.3f
+        layer.weights[0, 0] = 0.56
+        layer.weights[0, 1] = 0.9
+        layer.weights[0, 2] = -0.08
+        layer.weights[0, 2] = 0.12
+        layer.weights[2, 1] = 0.18
+        layer.weights[3, 2] = -0.25
+        layer.weights[1, 1] = 0.4
+        layer.weights[2, 0] = -0.3
 
-        layer.biases[0] = 0.3f
-        layer.biases[1] = -0.2f
-        layer.biases[2] = -0.8f
-        layer.biases[3] = 1.5f
+        layer.biases[0] = 0.3
+        layer.biases[1] = -0.2
+        layer.biases[2] = -0.8
+        layer.biases[3] = 1.5
 
         val result = layer.forward(toVec(floatArrayOf(0.4f, 0.8f, 0.9f)))
         result.numRows() shouldEqual 1

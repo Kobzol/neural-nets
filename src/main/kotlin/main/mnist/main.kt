@@ -8,8 +8,7 @@ import javafx.scene.control.Button
 import javafx.scene.image.ImageView
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
-import koma.create
-import koma.matrix.MatrixTypes
+import koma.matrix.ejml.EJMLMatrixFactory
 import mnist.MnistReader
 import nn.DataVector
 import nn.Net
@@ -20,11 +19,7 @@ import nn.layer.Perceptron
 import nn.learn.SGDLearner
 import java.awt.Transparency
 import java.awt.color.ColorSpace
-import java.awt.image.BufferedImage
-import java.awt.image.ComponentColorModel
-import java.awt.image.DataBuffer
-import java.awt.image.DataBufferByte
-import java.awt.image.Raster
+import java.awt.image.*
 import java.io.File
 import javax.imageio.ImageIO
 
@@ -42,7 +37,7 @@ fun readImages(path: String): List<DataVector>
             }
         }
 
-        create(arr, MatrixTypes.FloatType)
+        EJMLMatrixFactory().create(arr)
     }.toList()
 }
 fun readLabels(path: String): List<DataVector>
@@ -51,7 +46,7 @@ fun readLabels(path: String): List<DataVector>
     return labels.map {
         val label = DoubleArray(10)
         label[it] = 1.0
-        create(label, MatrixTypes.FloatType)
+        EJMLMatrixFactory().create(label)
     }.toList()
 }
 fun countCorrect(testInputs: List<DataVector>, testLabels: List<DataVector>, net: Net): Int
@@ -110,21 +105,22 @@ class MnistApp: Application()
 
 fun main(args: Array<String>)
 {
-    val trainInput = readImages("mnist/mnist-train-input.bin").subList(0, 1000).toMutableList()
-    val trainLabels = readLabels("mnist/mnist-train-label.bin").subList(0, 1000).toMutableList()
-    val testInput = readImages("mnist/mnist-test-input.bin").toMutableList()
-    val testLabels = readLabels("mnist/mnist-test-label.bin").toMutableList()
+    val trainInput = readImages("mnist/mnist-train-input.bin").subList(0, 5000)
+    val trainLabels = readLabels("mnist/mnist-train-label.bin").subList(0, 5000)
+    val testInput = readImages("mnist/mnist-test-input.bin")
+    val testLabels = readLabels("mnist/mnist-test-label.bin")
 
     val net = NetBuilder()
-            .add { s -> Perceptron(s, 30, Sigmoid(), createNormalInitializer(0.0, 1.0, true)) }
+            .add { s -> Perceptron(s, 15, Sigmoid(), createNormalInitializer(0.0, 1.0, true)) }
             .add { s -> Perceptron(s, 10, Sigmoid(), createNormalInitializer(0.0, 1.0, true)) }
             .build(784)
 
-    val learner = SGDLearner(net, 0.1f, 10)
+    val learner = SGDLearner(net, 0.1f, 100)
     for (i in 0 until 300)
     {
         learner.learnBatch(trainInput, trainLabels)
-        //println(net.getLoss(testInput, testLabels))
-        println(countCorrect(trainInput, trainLabels, net))
+        println("Epoch $i")
+        println("Loss: ${net.getLoss(testInput, testLabels)}")
+        println("Correct: ${countCorrect(testInput, testLabels, net)}")
     }
 }

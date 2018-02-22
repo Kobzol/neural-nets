@@ -60,7 +60,7 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
         val b = layer.weights[0, 1]
         val c = layer.biases[0]
 
-        this.drawLine(Line(a, b, c))
+        this.drawLine(Line(a.toFloat(), b.toFloat(), c.toFloat()))
     }
 
     private fun scalePoint(point: Point2D): Point2D

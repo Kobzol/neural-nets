@@ -3,7 +3,7 @@ package nn
 import koma.matrix.Matrix
 import nn.layer.Layer
 
-typealias DataVector = Matrix<Float>
+typealias DataVector = Matrix<Double>
 
 class Net(val layers: List<Layer>)
 {
@@ -23,7 +23,7 @@ class Net(val layers: List<Layer>)
         return inputs.zip(labels).map { (input, label) ->
             val output = this.forward(input)
             val diff = label - output
-            diff.elementTimes(diff).elementSum()
+            diff.elementTimes(diff).elementSum().toFloat()
         }.sum()
     }
 }

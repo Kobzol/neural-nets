@@ -5,8 +5,8 @@ import nn.DataVector
 
 abstract class Activation
 {
-    abstract fun forward(input: Float): Float
-    abstract fun backward(input: Float): Float
+    abstract fun forward(input: Double): Double
+    abstract fun backward(input: Double): Double
 
     fun forward(input: DataVector): DataVector
     {

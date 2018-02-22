@@ -49,15 +49,15 @@ fun main(args: Array<String>)
     val evaluator =  object: FitnessEvaluator {
         override fun evaluate(data: FloatArray): Float
         {
-            net.layers[0].biases[0] = data[0]
-            net.layers[0].weights[0, 0] = data[1]
-            net.layers[0].weights[0, 1] = data[2]
-            net.layers[0].biases[1] = data[3]
-            net.layers[0].weights[1, 0] = data[4]
-            net.layers[0].weights[1, 1] = data[5]
-            net.layers[1].biases[0] = data[6]
-            net.layers[1].weights[0, 0] = data[7]
-            net.layers[1].weights[0, 1] = data[8]
+            net.layers[0].biases[0] = data[0].toDouble()
+            net.layers[0].weights[0, 0] = data[1].toDouble()
+            net.layers[0].weights[0, 1] = data[2].toDouble()
+            net.layers[0].biases[1] = data[3].toDouble()
+            net.layers[0].weights[1, 0] = data[4].toDouble()
+            net.layers[0].weights[1, 1] = data[5].toDouble()
+            net.layers[1].biases[0] = data[6].toDouble()
+            net.layers[1].weights[0, 0] = data[7].toDouble()
+            net.layers[1].weights[0, 1] = data[8].toDouble()
 
             val loss = net.getLoss(inputs, outputs)
             best = Math.min(best, loss)

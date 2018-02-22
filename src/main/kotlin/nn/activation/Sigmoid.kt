@@ -2,13 +2,13 @@ package nn.activation
 
 class Sigmoid : Activation()
 {
-    override fun forward(input: Float): Float
+    override fun forward(input: Double): Double
     {
-        return (1.0f / (1 + Math.exp(-input.toDouble()))).toFloat()
+        return (1.0 / (1 + Math.exp(-input)))
     }
-    override fun backward(input: Float): Float
+    override fun backward(input: Double): Double
     {
         val f = this.forward(input)
-        return f * (1.0f - f)
+        return f * (1.0 - f)
     }
 }

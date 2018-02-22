@@ -15,7 +15,7 @@ class SGDLearner(net: Net,
     {
         val features = inputs.toMutableList()
         val outputs = labels.toMutableList()
-        shuffleMultiple(features, outputs)
+        //shuffleMultiple(features, outputs)
 
         val miniBatchFeatures = partition(features, this.miniBatchSize)
         val miniBatchLabels = partition(outputs, this.miniBatchSize)

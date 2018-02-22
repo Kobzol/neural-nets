@@ -1,12 +1,11 @@
 package nn
 
-import koma.create
-import koma.matrix.MatrixTypes
+import koma.matrix.ejml.EJMLMatrixFactory
 import java.util.*
 
 fun toVec(array: FloatArray): DataVector
 {
-    return create(array.map { it.toDouble() }.toDoubleArray(), MatrixTypes.FloatType)
+    return EJMLMatrixFactory().create(array.map { it.toDouble() }.toDoubleArray())
 }
 
 fun <T> shuffleMultiple(vararg lists: MutableList<T>)
