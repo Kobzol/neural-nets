@@ -44,8 +44,12 @@ fun createHebbNet(inputSize: Int): Net
             .build(inputSize)
 }
 
-fun createNormalInitializer(mean: Double = 0.0, variance: Double = 1.0): (Int) -> Float
+fun createNormalInitializer(mean: Double = 0.0, variance: Double = 1.0, scaleToSize: Boolean = false): (Int) -> Float
 {
     val random = Random()
-    return { (random.nextGaussian() * variance + mean).toFloat() }
+    return { size ->
+        val value = (random.nextGaussian() * variance + mean).toFloat()
+
+        if (scaleToSize) (value / Math.sqrt(size.toDouble())).toFloat() else value
+    }
 }
