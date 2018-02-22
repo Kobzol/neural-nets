@@ -6,7 +6,7 @@ import nn.DataVector
 import nn.Net
 
 class BackpropLearner(private val net: Net,
-                      private var learningRate: Float)
+                      var learningRate: Double)
 {
     fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
     {
@@ -33,13 +33,13 @@ class BackpropLearner(private val net: Net,
         // apply biases
         for (layer in biasDeltas.indices)
         {
-            this.net.layers[layer].biases -= biasDeltas[layer].times(this.learningRate.toDouble())
+            this.net.layers[layer].biases -= biasDeltas[layer] * this.learningRate
         }
 
         // apply weights
         for (layer in weightDeltas.indices)
         {
-            this.net.layers[layer].weights -= weightDeltas[layer].times(this.learningRate.toDouble())
+            this.net.layers[layer].weights -= weightDeltas[layer] * this.learningRate
         }
     }
 

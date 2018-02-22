@@ -12,7 +12,7 @@ class LossChart(xLabel: String, yLabel: String) : LineChart<Number, Number>(Numb
         this.yAxis.label = yLabel
     }
 
-    fun addPoint(label: String, point: Float)
+    fun addPoint(label: String, point: Double)
     {
         var series = this.getSeries(label)
         if (series == null)

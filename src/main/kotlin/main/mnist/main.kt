@@ -1,6 +1,7 @@
 package main.mnist
 
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Group
 import javafx.scene.Scene
@@ -9,10 +10,12 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import koma.matrix.ejml.EJMLMatrixFactory
+import main.gui.LossChart
 import mnist.MnistReader
 import nn.DataVector
 import nn.Net
 import nn.NetBuilder
+import nn.activation.ReLu
 import nn.activation.Sigmoid
 import nn.createNormalInitializer
 import nn.layer.Perceptron
@@ -68,54 +71,64 @@ class MnistApp: Application()
         val container = VBox()
         root.children.add(container)
 
-        val canvas = ImageView()
-        canvas.fitWidth = 100.0
-        canvas.fitHeight = 100.0
-        container.children.add(canvas)
-
-        val trainInput = readImages("mnist/mnist-train-input.bin").subList(0, 1000).toMutableList()
-        val trainLabels = readLabels("mnist/mnist-train-label.bin").subList(0, 1000).toMutableList()
-        val testInput = readImages("mnist/mnist-test-input.bin").toMutableList()
-        val testLabels = readLabels("mnist/mnist-test-label.bin").toMutableList()
-
-        val button = Button("test")
-        var i = 0
-        button.setOnAction {
-            val input = testInput[i]
-            val data = input.toIterable().map {
-                (it * 255.0f).toByte()
-            }.toByteArray()
-            val buffer = DataBufferByte(data, data.size)
-            val model = ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_GRAY), intArrayOf(8), false, true,
-                    Transparency.OPAQUE, DataBuffer.TYPE_BYTE)
-            val sm = model.createCompatibleSampleModel(28, 28)
-            val raster = Raster.createWritableRaster(sm, buffer, null)
-            val buffered = BufferedImage(model, raster, false, null)
-
-            ImageIO.write(buffered, "jpg", File("test.jpg"))
-            val img = SwingFXUtils.toFXImage(buffered, null)
-            canvas.image = img
-            i++
-        }
-        container.children.add(button)
+        val chart = LossChart("Iteration", "Loss")
+        container.children.add(chart)
 
         stage.show()
+
+        val thread = object : Thread() {
+            override fun run() {
+                val trainInput = readImages("mnist/mnist-train-input.bin").subList(0, 5000)
+                val trainLabels = readLabels("mnist/mnist-train-label.bin").subList(0, 5000)
+                val testInput = readImages("mnist/mnist-test-input.bin")
+                val testLabels = readLabels("mnist/mnist-test-label.bin")
+
+                val net = NetBuilder()
+                        .add { s -> Perceptron(s, 15, ReLu(), createNormalInitializer(0.0, 1.0, true)) }
+                        .add { s -> Perceptron(s, 10, Sigmoid(), createNormalInitializer(0.0, 1.0, true)) }
+                        .build(784)
+
+                val learner = SGDLearner(net, 0.1, 100)
+                for (i in 0 until 300)
+                {
+                    learner.learnBatch(trainInput, trainLabels)
+
+                    val loss = net.getLoss(testInput, testLabels)
+                    val correct = countCorrect(testInput, testLabels, net)
+                    println("Epoch $i")
+                    println("Loss: $loss")
+                    println("Correct: $correct")
+                    Platform.runLater {
+                        chart.addPoint("Loss", loss)
+                        chart.addPoint("Correct", correct.toDouble())
+                    }
+
+                    if (i > 0 && i % 50 == 0)
+                    {
+                        learner.learningRate *= 0.5f
+                    }
+                }
+            }
+        }
+        thread.start()
     }
 }
 
 fun main(args: Array<String>)
 {
+    Application.launch(MnistApp::class.java, *args)
+
     val trainInput = readImages("mnist/mnist-train-input.bin").subList(0, 5000)
     val trainLabels = readLabels("mnist/mnist-train-label.bin").subList(0, 5000)
     val testInput = readImages("mnist/mnist-test-input.bin")
     val testLabels = readLabels("mnist/mnist-test-label.bin")
 
     val net = NetBuilder()
-            .add { s -> Perceptron(s, 15, Sigmoid(), createNormalInitializer(0.0, 1.0, true)) }
+            .add { s -> Perceptron(s, 15, ReLu(), createNormalInitializer(0.0, 1.0, true)) }
             .add { s -> Perceptron(s, 10, Sigmoid(), createNormalInitializer(0.0, 1.0, true)) }
             .build(784)
 
-    val learner = SGDLearner(net, 0.1f, 100)
+    val learner = SGDLearner(net, 0.1, 100)
     for (i in 0 until 300)
     {
         learner.learnBatch(trainInput, trainLabels)

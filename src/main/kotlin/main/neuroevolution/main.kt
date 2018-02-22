@@ -45,7 +45,7 @@ fun main(args: Array<String>)
             bounds
     )
 
-    var best = 1.0f
+    var best = 1.0
     val evaluator =  object: FitnessEvaluator {
         override fun evaluate(data: FloatArray): Float
         {
@@ -63,7 +63,7 @@ fun main(args: Array<String>)
             best = Math.min(best, loss)
             println(loss)
 
-            return 1.0f - loss
+            return (1.0 - loss).toFloat()
         }
     }
     val de = DE(PopulationGenerator().generateAreaPopulation(100, boundsArray),

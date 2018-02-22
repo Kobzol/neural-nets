@@ -20,7 +20,7 @@ class MainScreen(private val perceptronTask: PerceptronTaskDto) : VBox()
 
     init
     {
-        this.learner = HebbLearner(this.net, 0.05f)
+        this.learner = HebbLearner(this.net, 0.05)
 
         val learnBtn = Button("Learn one step")
         learnBtn.setOnAction {

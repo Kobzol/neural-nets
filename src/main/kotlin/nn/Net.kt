@@ -18,12 +18,12 @@ class Net(val layers: List<Layer>)
         return data
     }
 
-    fun getLoss(inputs: List<DataVector>, labels: List<DataVector>): Float
+    fun getLoss(inputs: List<DataVector>, labels: List<DataVector>): Double
     {
         return inputs.zip(labels).map { (input, label) ->
             val output = this.forward(input)
             val diff = label - output
-            diff.elementTimes(diff).elementSum().toFloat()
+            diff.elementTimes(diff).elementSum()
         }.sum()
     }
 }
