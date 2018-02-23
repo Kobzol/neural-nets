@@ -2,6 +2,7 @@ package nn
 
 import koma.matrix.ejml.EJMLMatrixFactory
 import java.util.*
+import kotlin.system.measureNanoTime
 
 fun toVec(array: FloatArray): DataVector
 {
@@ -29,4 +30,10 @@ fun <T> shuffleMultiple(vararg lists: MutableList<T>)
 fun <T> partition(data: List<T>, size: Int): List<List<T>>
 {
     return (0..(data.size - 1) step size).map { data.subList(it, it + size) }
+}
+
+inline fun profile(name: String, cb: () -> Unit)
+{
+    val time = measureNanoTime(cb)
+    println("$name: ${time / 1_000_000} ms")
 }

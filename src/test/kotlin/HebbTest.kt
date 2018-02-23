@@ -11,7 +11,7 @@ class HebbTest
     fun `Hebb learns AND`()
     {
         val net = createHebbNet(2)
-        val learner = HebbLearner(net, 0.1f)
+        val learner = HebbLearner(net, 0.1)
         val inputs = listOf(
                 floatArrayOf(0.0f, 0.0f),
                 floatArrayOf(0.0f, 1.0f),
@@ -37,7 +37,7 @@ class HebbTest
     fun `Hebb learns OR`()
     {
         val net = createHebbNet(2)
-        val learner = HebbLearner(net, 0.1f)
+        val learner = HebbLearner(net, 0.1)
         val inputs = listOf(
                 floatArrayOf(0.0f, 0.0f),
                 floatArrayOf(0.0f, 1.0f),
@@ -63,7 +63,7 @@ class HebbTest
     fun `Hebb doesn't learn XOR`()
     {
         val net = createHebbNet(2)
-        val learner = HebbLearner(net, 0.05f)
+        val learner = HebbLearner(net, 0.05)
         val inputs = listOf(
                 floatArrayOf(0.0f, 0.0f),
                 floatArrayOf(0.0f, 1.0f),

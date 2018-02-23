@@ -3,11 +3,14 @@ package nn
 import nn.activation.Signum
 import nn.layer.Layer
 import nn.layer.Perceptron
+import nn.loss.Loss
+import nn.loss.QuadraticLoss
 import java.util.*
 
 class NetBuilder
 {
     private val layers = mutableListOf<(Int) -> Layer>()
+    private var loss: Loss = QuadraticLoss()
 
     fun add(layerCreator: (Int) -> Layer): NetBuilder
     {
@@ -18,6 +21,12 @@ class NetBuilder
     fun add(layer: Layer): NetBuilder
     {
         this.layers += { layer }
+        return this
+    }
+
+    fun loss(loss: Loss): NetBuilder
+    {
+        this.loss = loss
         return this
     }
 
@@ -33,7 +42,7 @@ class NetBuilder
             size = layer.neuronCount
         }
 
-        return Net(layers)
+        return Net(layers, this.loss)
     }
 }
 

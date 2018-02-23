@@ -1,5 +1,7 @@
 package nn.learn
 
+import koma.extensions.get
+import koma.extensions.mapIndexed
 import koma.matrix.Matrix
 import koma.matrix.ejml.EJMLMatrixFactory
 import nn.DataVector
@@ -12,14 +14,15 @@ class BackpropLearner(private val net: Net,
     {
         val weightDeltas = this.net.layers.map {
             EJMLMatrixFactory().zeros(it.neuronCount, it.inputSize) as Matrix<Double>
-        }.toMutableList()
+        }.toTypedArray()
         val biasDeltas = this.net.layers.map {
             EJMLMatrixFactory().zeros(1, it.neuronCount) as Matrix<Double>
-        }.toMutableList()
+        }.toTypedArray()
 
         for ((input, label) in inputs.zip(labels))
         {
             val (weightDelta, biasDelta) = this.learnSample(input, label)
+
             for (layer in weightDeltas.indices)
             {
                 weightDeltas[layer] += weightDelta[layer]
@@ -40,6 +43,7 @@ class BackpropLearner(private val net: Net,
         for (layer in weightDeltas.indices)
         {
             this.net.layers[layer].weights -= weightDeltas[layer] * this.learningRate
+            this.net.layers[layer].weights -= (this.net.layers[layer].weights * (this.learningRate * 0.01))
         }
     }
 
@@ -48,8 +52,8 @@ class BackpropLearner(private val net: Net,
         val (outputs, activations) = this.feedForward(features)
 
         // derivation of L2 loss function
-        var delta = (activations.last() - label)
-                .elementTimes(this.net.layers.last().activation.backward(outputs.last()))
+        val cost = activations.last().mapIndexed { _, col, ele -> this.net.loss.backward(ele, label[col]) }
+        var delta = cost.elementTimes(this.net.layers.last().activation.backward(outputs.last()))
 
         val biasDeltas = mutableListOf(delta)
         val weightDeltas = mutableListOf(delta.transpose() * activations[activations.size - 2])
@@ -68,7 +72,7 @@ class BackpropLearner(private val net: Net,
         return Pair(weightDeltas, biasDeltas)
     }
 
-    private fun feedForward(input: DataVector): Pair<List<DataVector>, List<DataVector>>
+    private fun feedForward(input: DataVector): Pair<Array<DataVector>, Array<DataVector>>
     {
         val outputs = mutableListOf<DataVector>()
         val activations = mutableListOf(input)
@@ -81,6 +85,6 @@ class BackpropLearner(private val net: Net,
             activation = layer.activation.forward(output)
             activations += activation
         }
-        return Pair(outputs, activations)
+        return Pair(outputs.toTypedArray(), activations.toTypedArray())
     }
 }

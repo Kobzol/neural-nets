@@ -22,8 +22,8 @@ class PerceptronTest
     fun `layer forwards`()
     {
         val layer = Perceptron(3, 4, object : Activation() {
-            override fun forward(input: Float): Float = input * 2
-            override fun backward(input: Float): Float = input
+            override fun forward(input: Double): Double = input * 2.0
+            override fun backward(input: Double): Double = input
         }, { _ -> 0.5f })
 
         layer.weights[0, 0] = 0.56

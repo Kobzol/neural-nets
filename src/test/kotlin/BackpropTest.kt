@@ -17,7 +17,7 @@ class BackpropTest
                 .add { s -> Perceptron(s, 10, Sigmoid(), createNormalInitializer()) }
                 .add { s -> Perceptron(s, 1, Sigmoid(), createNormalInitializer()) }
                 .build(2)
-        val learner = BackpropLearner(net, 0.01f)
+        val learner = BackpropLearner(net, 0.01)
         val inputs = listOf(
                 floatArrayOf(0.0f, 0.0f),
                 floatArrayOf(0.0f, 1.0f),

@@ -1,11 +1,15 @@
 package nn
 
+import koma.extensions.get
+import koma.extensions.mapIndexed
 import koma.matrix.Matrix
 import nn.layer.Layer
+import nn.loss.Loss
+import nn.loss.QuadraticLoss
 
 typealias DataVector = Matrix<Double>
 
-class Net(val layers: List<Layer>)
+class Net(val layers: List<Layer>, val loss: Loss = QuadraticLoss())
 {
     fun forward(inputs: DataVector): DataVector
     {
@@ -20,10 +24,11 @@ class Net(val layers: List<Layer>)
 
     fun getLoss(inputs: List<DataVector>, labels: List<DataVector>): Double
     {
-        return inputs.zip(labels).map { (input, label) ->
-            val output = this.forward(input)
-            val diff = label - output
-            diff.elementTimes(diff).elementSum()
+        val loss = inputs.zip(labels).map { (input, label) ->
+            this.forward(input)
+                    .mapIndexed { _, col, ele -> this.loss.forward(ele, label[col]) }
+                    .elementSum()
         }.sum()
+        return this.loss.normalizeLoss(loss, inputs.size)
     }
 }

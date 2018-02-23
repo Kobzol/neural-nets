@@ -10,8 +10,8 @@ class ActivationTest
     fun `activation forwards all inputs`()
     {
         val activation = object : Activation() {
-            override fun backward(input: Float): Float = input
-            override fun forward(input: Float): Float = input * 2
+            override fun backward(input: Double): Double = input
+            override fun forward(input: Double): Double = input * 2.0
         }
 
         val output = activation.forward(EJMLMatrixFactory().create(doubleArrayOf(1.0, 2.0, 3.0)))

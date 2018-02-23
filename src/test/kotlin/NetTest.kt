@@ -21,6 +21,6 @@ class NetTest
         Math.abs(net.getLoss(
                 listOf(toVec(floatArrayOf(0.2f, 0.1f)), toVec(floatArrayOf(0.5f, 0.8f))),
                 listOf(toVec(floatArrayOf(0.3f, 0.6f)), toVec(floatArrayOf(0.4f, 0.2f)))
-        ) - 0.573f) shouldBeLessOrEqualTo 0.00001f
+        ) - 0.573f) shouldBeLessOrEqualTo 0.00001
     }
 }
