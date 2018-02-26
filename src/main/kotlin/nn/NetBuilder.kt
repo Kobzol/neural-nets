@@ -49,7 +49,7 @@ class NetBuilder
 fun createHebbNet(inputSize: Int): Net
 {
     return NetBuilder()
-            .add { s -> Perceptron(s, 1, Signum(), createNormalInitializer(0.5, 0.5)) }
+            .add { s -> Perceptron(s, 1, Signum(), createNormalInitializer(0.5, 0.25)) }
             .build(inputSize)
 }
 

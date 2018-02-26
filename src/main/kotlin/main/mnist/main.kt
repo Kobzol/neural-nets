@@ -14,9 +14,6 @@ import nn.activation.ReLu
 import nn.activation.Sigmoid
 import nn.layer.Perceptron
 import nn.learn.SGDLearner
-import nn.loss.CrossEntropy
-import kotlin.system.measureNanoTime
-import kotlin.system.measureTimeMillis
 
 
 fun readImages(path: String): List<DataVector>

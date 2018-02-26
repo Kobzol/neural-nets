@@ -4,6 +4,7 @@ import javafx.geometry.Point2D
 import javafx.scene.canvas.Canvas
 import javafx.scene.paint.Color
 import javafx.scene.paint.Paint
+import koma.create
 import koma.extensions.get
 import main.geom.Line
 import nn.Net
@@ -61,6 +62,19 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
         val c = layer.biases[0]
 
         this.drawLine(Line(a.toFloat(), b.toFloat(), c.toFloat()))
+    }
+    fun drawNet2D(net: Net)
+    {
+        for (y in 0 until this.height.toInt())
+        {
+            for (x in 0 until this.width.toInt())
+            {
+                val input = create(doubleArrayOf(x.toDouble(), y.toDouble()))
+                val output = net.forward(input)[0]
+
+                this.graphicsContext2D.pixelWriter.setColor(x, y, Color.hsb(0.5, output, 1.0))
+            }
+        }
     }
 
     private fun scalePoint(point: Point2D): Point2D

@@ -4,8 +4,15 @@ import nn.DataVector
 import nn.Net
 
 class HebbLearner(private val net: Net,
-                  private var learningRate: Double)
+                  private var learningRate: Double): Learner
 {
+    override fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
+    {
+        inputs.zip(labels).forEach { (input, label) ->
+            this.learnSample(input, label)
+        }
+    }
+
     fun learnSample(input: DataVector, label: DataVector)
     {
         val layer = this.net.layers[0]
@@ -15,12 +22,5 @@ class HebbLearner(private val net: Net,
 
         layer.weights += deltas
         layer.biases += diff
-    }
-
-    fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
-    {
-        inputs.zip(labels).forEach { (input, label) ->
-            this.learnSample(input, label)
-        }
     }
 }

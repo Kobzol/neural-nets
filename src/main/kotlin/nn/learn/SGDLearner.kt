@@ -7,7 +7,7 @@ import nn.shuffleMultiple
 
 class SGDLearner(net: Net,
                  learningRate: Double,
-                 private val miniBatchSize: Int)
+                 private val miniBatchSize: Int): Learner
 {
     var learningRate: Double = learningRate
         set (value) {
@@ -15,7 +15,7 @@ class SGDLearner(net: Net,
         }
     private val learner = BackpropLearner(net, learningRate / miniBatchSize)
 
-    fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
+    override fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
     {
         val features = inputs.toMutableList()
         val outputs = labels.toMutableList()

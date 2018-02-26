@@ -8,9 +8,9 @@ import nn.DataVector
 import nn.Net
 
 class BackpropLearner(private val net: Net,
-                      var learningRate: Double)
+                      var learningRate: Double): Learner
 {
-    fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
+    override fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
     {
         val weightDeltas = this.net.layers.map {
             EJMLMatrixFactory().zeros(it.neuronCount, it.inputSize) as Matrix<Double>
