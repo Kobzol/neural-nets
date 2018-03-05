@@ -25,6 +25,11 @@ class LossChart(xLabel: String, yLabel: String) : LineChart<Number, Number>(Numb
         series.data.add(XYChart.Data(series.data.size + 1, point))
     }
 
+    fun reset()
+    {
+        this.data.clear()
+    }
+
     private fun getSeries(label: String): Series<Number, Number>?
     {
         return this.data.firstOrNull { it.name == label }

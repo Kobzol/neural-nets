@@ -3,6 +3,7 @@ package nn
 import nn.activation.Signum
 import nn.layer.Layer
 import nn.layer.Perceptron
+import nn.loss.HebbLoss
 import nn.loss.Loss
 import nn.loss.QuadraticLoss
 import java.util.*
@@ -50,6 +51,7 @@ fun createHebbNet(inputSize: Int): Net
 {
     return NetBuilder()
             .add { s -> Perceptron(s, 1, Signum(), createNormalInitializer(0.5, 0.25)) }
+            .loss(HebbLoss())
             .build(inputSize)
 }
 

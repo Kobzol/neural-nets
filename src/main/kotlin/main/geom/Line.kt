@@ -1,9 +1,9 @@
 package main.geom
 
 import javafx.geometry.Point2D
-import java.lang.Float.isNaN
+import java.lang.Double.isNaN
 
-class Line(val a: Float, val b: Float, val c: Float)
+class Line(val a: Double, val b: Double, val c: Double)
 {
     fun intersect(line: Line): Point2D?
     {
@@ -17,6 +17,6 @@ class Line(val a: Float, val b: Float, val c: Float)
         val x = (-b * y - c) / a
         if (isNaN(x)) return null
 
-        return Point2D(x.toDouble(), y.toDouble())
+        return Point2D(x, y)
     }
 }

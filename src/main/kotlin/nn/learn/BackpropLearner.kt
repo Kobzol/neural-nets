@@ -42,8 +42,8 @@ class BackpropLearner(private val net: Net,
         // apply weights
         for (layer in weightDeltas.indices)
         {
-            this.net.layers[layer].weights -= weightDeltas[layer] * this.learningRate
-            this.net.layers[layer].weights -= (this.net.layers[layer].weights * (this.learningRate * 0.01))
+            this.net.layers[layer].weights -= (weightDeltas[layer] * this.learningRate
+                    + (this.net.layers[layer].weights * (this.learningRate * 0.01)))
         }
     }
 

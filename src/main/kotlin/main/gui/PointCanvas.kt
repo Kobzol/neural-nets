@@ -18,26 +18,26 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
         this.graphicsContext2D.clearRect(0.0, 0.0, this.width, this.height)
     }
 
-    fun drawPoints(point: Point2D, color: Color)
+    fun drawPoint(point: Point2D, color: Color, scale: Boolean = true)
     {
         val ctx = this.graphicsContext2D
         ctx.fill = Paint.valueOf(color.toString())
 
-        val scaled = this.scalePoint(point)
-        ctx.fillOval(scaled.x, scaled.y, 3.0, 3.0)
+        val scaled = if (scale) this.scalePoint(point) else point
+        ctx.fillOval(scaled.x, this.height - scaled.y, 3.0, 3.0)
     }
 
     fun drawLine(line: Line)
     {
-        val ctx = this.graphicsContext2D
+        /*val ctx = this.graphicsContext2D
         ctx.stroke = Paint.valueOf(Color.BLUE.toString())
         ctx.lineWidth = 2.0
 
         val intersects = listOf(
-                Line(1.0f, 0.0f, 0.0f),
-                Line(0.0f, 1.0f, 0.0f),
-                Line(1.0f, 0.0f, -this.width.toFloat()),
-                Line(0.0f, 1.0f, -this.height.toFloat())
+                Line(1.0, 0.0, 0.0),
+                Line(0.0, 1.0, 0.0),
+                Line(1.0, 0.0, -this.width),
+                Line(0.0, 1.0, -this.height)
         )
                 .map { line.intersect(it) }
                 .filter { it != null && it.x >= 0 && it.x <= this.width && it.y >= 0 && it.y <= this.height }
@@ -47,10 +47,20 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
         if (intersects.size > 1)
         {
             ctx.beginPath()
-            ctx.moveTo(intersects[0].x, intersects[0].y)
-            ctx.lineTo(intersects[1].x, intersects[1].y)
+            ctx.moveTo(intersects[0].x, this.height - intersects[0].y)
+            ctx.lineTo(intersects[1].x, this.height - intersects[1].y)
             ctx.closePath()
             ctx.stroke()
+        }*/
+
+        val bslope = -line.c / line.b
+        val mslope = -line.a / line.b
+
+        for (i in 0 until 100)
+        {
+            val x = this.scale.x * (i / 100.0)
+            val result = mslope * x + bslope
+            this.drawPoint(Point2D(x, result), Color.BLUE)
         }
     }
 
@@ -61,7 +71,7 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
         val b = layer.weights[0, 1]
         val c = layer.biases[0]
 
-        this.drawLine(Line(a.toFloat(), b.toFloat(), c.toFloat()))
+        this.drawLine(Line(a, b, c))
     }
     fun drawNet2D(net: Net)
     {

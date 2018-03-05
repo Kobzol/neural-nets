@@ -10,6 +10,8 @@ class CrossEntropy : Loss
 
     override fun normalizeLoss(loss: Double, batchSize: Int): Double
     {
+        if (batchSize == 0) return 0.0
+
         return -loss / batchSize
     }
 }
