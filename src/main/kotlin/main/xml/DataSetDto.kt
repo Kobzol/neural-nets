@@ -13,10 +13,10 @@ class DataSetDto
 
     fun inputs(): List<DataVector>
     {
-        return this.elements.map { toVec(it.inputs.values.toFloatArray()) }
+        return this.elements.map { toVec(it.inputs.values.toDoubleArray()) }
     }
     fun outputs(): List<DataVector>
     {
-        return this.elements.map { toVec(floatArrayOf(it.output)) }
+        return this.elements.map { toVec(doubleArrayOf(it.output)) }
     }
 }

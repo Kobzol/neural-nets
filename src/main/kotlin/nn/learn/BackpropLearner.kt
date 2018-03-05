@@ -8,7 +8,7 @@ import nn.DataVector
 import nn.Net
 
 class BackpropLearner(private val net: Net,
-                      var learningRate: Double): Learner
+                      override var learningRate: Double): Learner
 {
     override fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
     {
@@ -42,8 +42,8 @@ class BackpropLearner(private val net: Net,
         // apply weights
         for (layer in weightDeltas.indices)
         {
-            this.net.layers[layer].weights -= (weightDeltas[layer] * this.learningRate
-                    + (this.net.layers[layer].weights * (this.learningRate * 0.01)))
+            this.net.layers[layer].weights -= weightDeltas[layer] * this.learningRate
+            //this.net.layers[layer].weights * (this.learningRate * 0.01)))
         }
     }
 
@@ -65,11 +65,11 @@ class BackpropLearner(private val net: Net,
             val nextLayer = this.net.layers[i + 1]
             val derivedActivation = layer.activation.backward(output)
             delta = (delta * nextLayer.weights).elementTimes(derivedActivation)
-            biasDeltas.add(0, delta)
-            weightDeltas.add(0, delta.transpose() * activations[i])
+            biasDeltas += delta
+            weightDeltas += delta.transpose() * activations[i]
         }
 
-        return Pair(weightDeltas, biasDeltas)
+        return Pair(weightDeltas.reversed(), biasDeltas.reversed())
     }
 
     private fun feedForward(input: DataVector): Pair<Array<DataVector>, Array<DataVector>>

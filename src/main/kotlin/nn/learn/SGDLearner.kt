@@ -9,10 +9,11 @@ class SGDLearner(net: Net,
                  learningRate: Double,
                  private val miniBatchSize: Int): Learner
 {
-    var learningRate: Double = learningRate
+    override var learningRate: Double
         set (value) {
             this.learner.learningRate = value / this.miniBatchSize
         }
+        get() = this.learner.learningRate * this.miniBatchSize
     private val learner = BackpropLearner(net, learningRate / miniBatchSize)
 
     override fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)

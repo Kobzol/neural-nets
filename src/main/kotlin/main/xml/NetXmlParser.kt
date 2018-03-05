@@ -11,4 +11,8 @@ class NetXmlParser
     {
         return this.serializer.read(PerceptronTaskDto::class.java, path.toFile())
     }
+    fun parseBackpropNet(path: Path): BackpropNetDto
+    {
+        return this.serializer.read(BackpropNetDto::class.java, path.toFile())
+    }
 }

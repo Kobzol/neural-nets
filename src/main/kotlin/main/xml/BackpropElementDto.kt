@@ -4,11 +4,11 @@ import org.simpleframework.xml.Element
 import org.simpleframework.xml.Root
 
 @Root(strict = false)
-class ElementDto
+class BackpropElementDto
 {
     @field:Element(name = "inputs")
     lateinit var inputs: InputDto
 
-    @field:Element(name = "output", required = false)
-    var output: Double = 0.0
+    @field:Element(name = "outputs", required = false)
+    var outputs: InputDto = InputDto()
 }

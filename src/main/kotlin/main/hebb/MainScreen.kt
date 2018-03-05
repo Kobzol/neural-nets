@@ -131,21 +131,4 @@ class MainScreen(private val perceptronTask: PerceptronTaskDto) : VBox()
         this.canvas.drawHebbNet(this.net)
         println("Error: ${this.net.getLoss(this.trainInputs, this.trainOutputs)}")
     }
-    /*fun drawSigmoid(net: Net)
-    {
-        this.canvas.clear()
-        this.canvas.drawNet2D(net)
-        this.perceptronTask.trainSet.elements.forEach {
-            this.canvas.drawPoint(
-                    Point2D(it.inputs.values[0].toDouble(), it.inputs.values[1].toDouble()),
-                    if (it.output == 1.0f) Color.RED else Color.GREEN
-            )
-        }
-        this.perceptronTask.testSet.elements.forEach {
-            this.canvas.drawPoint(
-                    Point2D(it.inputs.values[0].toDouble(), it.inputs.values[1].toDouble()),
-                    if (it.output == 1.0f) Color.BLUE else Color.PURPLE
-            )
-        }
-    }*/
 }

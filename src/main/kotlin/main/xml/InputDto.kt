@@ -7,5 +7,5 @@ import org.simpleframework.xml.Root
 class InputDto
 {
     @field:ElementList(entry = "value", empty = false, required = false, inline = true)
-    lateinit var values: List<Float>
+    var values: MutableList<Double> = mutableListOf()
 }

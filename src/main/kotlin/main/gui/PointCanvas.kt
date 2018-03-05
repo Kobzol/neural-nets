@@ -6,6 +6,7 @@ import javafx.scene.paint.Color
 import javafx.scene.paint.Paint
 import koma.create
 import koma.extensions.get
+import koma.extensions.set
 import main.geom.Line
 import nn.Net
 
@@ -60,7 +61,7 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
         {
             val x = this.scale.x * (i / 100.0)
             val result = mslope * x + bslope
-            this.drawPoint(Point2D(x, result), Color.BLUE)
+            this.drawPoint(Point2D(x.toDouble(), result), Color.BLUE)
         }
     }
 
@@ -79,10 +80,12 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
         {
             for (x in 0 until this.width.toInt())
             {
-                val input = create(doubleArrayOf(x.toDouble(), y.toDouble()))
+                val point = this.unscalePoint(Point2D(x.toDouble(), y.toDouble()))
+
+                val input = create(doubleArrayOf(point.x, point.y))
                 val output = net.forward(input)[0]
 
-                this.graphicsContext2D.pixelWriter.setColor(x, y, Color.hsb(0.5, output, 1.0))
+                this.graphicsContext2D.pixelWriter.setColor(x, (this.height - y).toInt(), Color.hsb(0.5, output, 1.0))
             }
         }
     }
@@ -92,6 +95,13 @@ class PointCanvas(width: Double, height: Double) : Canvas(width, height)
         return Point2D(
                 (point.x / this.scale.x) * this.width,
                 (point.y / this.scale.y) * this.height
+        )
+    }
+    private fun unscalePoint(point: Point2D): Point2D
+    {
+        return Point2D(
+                (point.x / this.width) * this.scale.x,
+                (point.y / this.height) * this.scale.y
         )
     }
 }

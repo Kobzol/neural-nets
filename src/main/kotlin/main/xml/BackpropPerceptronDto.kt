@@ -5,14 +5,14 @@ import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
 
 @Root(strict = false)
-class PerceptronDto
+class BackpropPerceptronDto
 {
-    @field:Element(name = "lerningRate", required = false)
+    @field:Element(name = "learningRate", required = false)
     var learningRate: Double = 0.0
 
     @field:Element(name = "name", required = false)
     var name: String = ""
 
-    @field:ElementList(entry = "inputDescriptions", empty = false, required = false, inline = true)
+    @field:ElementList(entry = "inputDescription", empty = false, required = false, inline = true)
     lateinit var data: List<InputDescriptionDto>
 }

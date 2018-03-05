@@ -4,7 +4,7 @@ import nn.DataVector
 import nn.Net
 
 class HebbLearner(private val net: Net,
-                  private var learningRate: Double): Learner
+                  override var learningRate: Double): Learner
 {
     override fun learnBatch(inputs: List<DataVector>, labels: List<DataVector>)
     {

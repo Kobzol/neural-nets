@@ -8,6 +8,10 @@ fun toVec(array: FloatArray): DataVector
 {
     return EJMLMatrixFactory().create(array.map { it.toDouble() }.toDoubleArray())
 }
+fun toVec(array: DoubleArray): DataVector
+{
+    return EJMLMatrixFactory().create(array)
+}
 
 fun <T> shuffleMultiple(vararg lists: MutableList<T>)
 {
@@ -29,7 +33,7 @@ fun <T> shuffleMultiple(vararg lists: MutableList<T>)
 
 fun <T> partition(data: List<T>, size: Int): List<List<T>>
 {
-    return (0..(data.size - 1) step size).map { data.subList(it, it + size) }
+    return (0..(data.size - 1) step size).map { data.subList(it, Math.min(data.size, it + size)) }
 }
 
 inline fun profile(name: String, cb: () -> Unit)

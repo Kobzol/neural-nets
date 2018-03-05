@@ -7,10 +7,10 @@ import org.simpleframework.xml.Root
 class InputDescriptionDto
 {
     @field:Element(name = "minimum")
-    var minimum: Float = 0.0f
+    var minimum: Double = 0.0
 
     @field:Element(name = "maximum")
-    var maximum: Float = 0.0f
+    var maximum: Double = 0.0
 
     @field:Element(name = "name")
     var name: String = ""
