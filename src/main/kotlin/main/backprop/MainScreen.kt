@@ -49,10 +49,10 @@ class MainScreen(private val backpropTask: BackpropNetDto) : VBox()
 
         this.loadFromFile()
 
-        for (i in 0 until 50000)
+        /*for (i in 0 until 50000)
         {
             this.learnOneStep(5000)
-        }
+        }*/
     }
 
     private fun createButtonPanel(): Node

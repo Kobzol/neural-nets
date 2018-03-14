@@ -6,7 +6,7 @@ class ReLu : Activation()
 {
     override fun forward(input: Double): Double
     {
-        return max(0.0, input)
+        return max(0.01, input)
     }
     override fun backward(input: Double): Double
     {

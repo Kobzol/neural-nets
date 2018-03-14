@@ -5,6 +5,8 @@ import koma.create
 import nn.Net
 import nn.NetBuilder
 import nn.activation.Activation
+import nn.activation.Linear
+import nn.activation.ReLu
 import nn.activation.Sigmoid
 import nn.createNormalInitializer
 import nn.layer.Perceptron
@@ -50,11 +52,15 @@ class Persister
     private fun serializeActivation(activation: Activation): String
     {
         if (activation is Sigmoid) return "Sigmoid"
+        if (activation is ReLu) return "ReLu"
+        if (activation is Linear) return "Linear"
         return "Sigmoid"
     }
     private fun deserializeActivation(activation: String): Activation
     {
         if (activation == "Sigmoid") return Sigmoid()
+        if (activation == "ReLu") return ReLu()
+        if (activation == "Linear") return Linear()
         return Sigmoid()
     }
 }
