@@ -1,0 +1,64 @@
+//typ objektu
+testBox
+//třída objektu
+BlockObject
+//délka [m]
+20
+//šířka [m]
+10
+//výška [m]
+10
+//úhel <-pí, pí>[rad]
+0
+//šířka bitmapy [pixely]
+20
+//výška bitmapy [pixely]
+10
+
+//typ objektu
+testCylinder
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr
+5
+//šířka bitmapy [pixely]
+10
+//výška bitmapy [pixely]
+10
+
+
+//typ objektu
+house2
+//třída objektu
+BlockObject
+//délka [m]
+14
+//šířka [m]
+8
+//výška [m]
+10
+//úhel <-pí, pí>[rad]
+0
+//šířka bitmapy [pixely]
+14
+//výška bitmapy [pixely]
+8
+
+//typ objektu
+house3
+//třída objektu
+BlockObject
+//délka [m]
+30
+//šířka [m]
+15
+//výška [m]
+10
+//úhel <-pí, pí>[rad]
+0
+//šířka bitmapy [pixely]
+30
+//výška bitmapy [pixely]
+15

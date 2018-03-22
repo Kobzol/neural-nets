@@ -24,6 +24,12 @@ repositories {
 
 dependencies {
     compile project(":bia")
+    compile files("lib/vecmath-1.5.2.jar")
+    compile files("lib/derbyclient.jar")
+    compile files("lib/jBullet/jbullet.jar")
+    compile files("lib/lwjgl/jinput.jar")
+    compile files("lib/lwjgl/lwjgl.jar")
+    compile files("lib/lwjgl/lwjgl_util.jar")
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.simpleframework:simple-xml:2.7.1"

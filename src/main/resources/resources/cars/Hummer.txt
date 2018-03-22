@@ -1,0 +1,62 @@
+//Hummer H1 2003 6.5L
+/** maximální točivý moment */
+maxTorque = 550; //592
+/** maximální brzdná síla */
+maxBrakingForce = 600;
+/** maximální rychlost */
+maxSpeed = 150
+/** poháněná náprava FRONT, REAR nebo ALL */
+drive = ALL;
+
+/** poloměr pneumatiky */
+wheelRadius = 0.5;
+/** šířka pneumatiky */
+wheelWidth = 0.4;
+/** součinitel tření mezi pneumatikou a vozovkou */
+wheelFriction = 1.0;
+
+/** tuhost tlumičů */
+suspensionStiffness = 50.0;
+/** roztahování tlumičů */
+suspensionDampingCoef = 0.3;
+/** stlačování tlumičů */
+suspensionCompressionCoef = 0.2;
+/** délka nezatížených tlumičů */
+suspensionRestLength = 0.3;
+/** výška připojení tlumičů */
+connectionHeight = 0.6;
+/** maximální síla která může působit na tlumiče */
+maxSuspensionForce = 20000;
+/** maximalní stlačení tlumičů [cm]*/ 
+maxSuspensionTravelCm = 20;
+       
+/** váha auta [kg] */
+mass = 3274.0;
+/** součinitel odporu vzduchu */
+airCoef = 0.6;
+/** šířka auta [m] */
+carWidth = 2.2;
+/** šířka auta se zpětnými zrcátky (šířka bitmapy)*/
+carWidthWithMirrors = 2.5;
+/** výška auta [m] */
+carHeight = 1.500;
+/** délka auta [m] */
+carLength = 4.686;
+/** rozvor [m] */
+wheelbase = 3.302;
+/** rozchod [m] */
+wheelTrack = 1.819;
+/* pravděpodobnost převrácení auta */
+rollInfluence = 1.0;
+/** nejvyšší stupeň převodovky */
+topGear = 4;
+/** převodové poměry */
+gearRatios = 2.48 1.48 1.00 0.75;
+/** převodový poměr diferenciálu */
+diffRatio = 4.92;
+/** otáčky motoru při zařazení nižšího stupně */
+shiftDownRPM = 1000;
+/** otáčky motoru při zařazení vyššího stupně */
+shiftUpRPM = 3000;
+/** účinnost převodovky */
+efficiency = 0.8;

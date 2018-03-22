@@ -1,0 +1,131 @@
+//Stromy
+
+//typ objektu
+tree
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+tree2
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+snowTree
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+palm
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+tree3
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+tree4
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+tree5
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+tree6
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+tree7
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15
+
+//typ objektu
+tree8
+//třída objektu
+CylinderObject
+//výška [m]
+10
+//poloměr [m]
+1
+//šířka bitmapy [m]
+15
+//výška bitmapy [m]
+15

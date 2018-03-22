@@ -1,0 +1,61 @@
+//Jeep Wrangler 2011
+/** maximální točivý moment */
+maxTorque = 315;
+/** maximální brzdná síla */
+maxBrakingForce = 400;
+/** maximální rychlost */
+maxSpeed = 176
+/** poháněná náprava FRONT, REAR nebo ALL */
+drive = ALL;
+
+/** poloměr pneumatiky */
+wheelRadius = 0.4;
+/** šířka pneumatiky */
+wheelWidth = 0.3;
+/** součinitel tření mezi pneumatikou a vozovkou */
+offroadBonus = 0.1;
+
+/** tuhost tlumičů */
+suspensionStiffness = 50.0;
+/** roztahování tlumičů */
+suspensionDampingCoef = 0.3;
+/** stlačování tlumičů */
+suspensionCompressionCoef = 0.2;
+/** délka nezatížených tlumičů */
+suspensionRestLength = 0.3;
+/** výška připojení tlumičů */
+connectionHeight = 0.6;
+/** maximální síla která může působit na tlumiče */
+maxSuspensionForce = 20000;
+/** maximalní stlačení tlumičů [cm]*/ 
+maxSuspensionTravelCm = 20;
+       
+/** váha auta [kg] */
+mass = 1816.0;
+/** součinitel odporu vzduchu */
+airCoef = 0.5;
+/** šířka auta [m] */
+carWidth = 1.873;
+/** šířka auta se zpětnými zrcátky (šířka bitmapy)*/
+carWidthWithMirrors = 2.1;
+/** výška auta [m] */
+carHeight = 1.500;
+/** délka auta [m] */
+carLength = 4.223;
+/** rozvor [m] */
+wheelbase = 2.424;
+/** rozchod [m] */
+wheelTrack = 1.572;
+
+/** nejvyšší stupeň převodovky */
+topGear = 6;
+/** převodové poměry */
+gearRatios = 4.46 2.61 1.72 1.25 1.00 0.79;
+/** převodový poměr diferenciálu */
+diffRatio = 4.10;
+/** otáčky motoru při zařazení nižšího stupně */
+shiftDownRPM = 2500;
+/** otáčky motoru při zařazení vyššího stupně */
+shiftUpRPM = 5000;
+/** účinnost převodovky */
+efficiency = 0.8;

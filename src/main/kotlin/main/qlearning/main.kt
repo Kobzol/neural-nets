@@ -218,12 +218,13 @@ fun initField(size: Int, fixed: Boolean = true): Array<FieldType>
     return array
 }
 
-fun createGame(fixed: Boolean = true): Game
+fun createGame(fixed: Boolean = true, size: Int = 6): Game
 {
     val random = Random()
     while (true)
     {
-        val game = Game(initField(4, fixed), Point2D(random.nextInt(4).toDouble(), random.nextInt(4).toDouble()))
+        val game = Game(initField(size, fixed), Point2D(random.nextInt(size).toDouble(),
+                random.nextInt(size).toDouble()))
         if (game.isPossible() && !game.isFinal())
         {
             return game
@@ -270,7 +271,7 @@ fun playGame(net: Net, game: Game)
     println(String(repr))
 }
 
-fun trainTable(epochs: Int, learningRate: Double, q: QTable<String>)
+fun trainTable(epochs: Int, learningRate: Double, q: QTable<String>, size: Int)
 {
     val random = Random()
 
@@ -278,7 +279,7 @@ fun trainTable(epochs: Int, learningRate: Double, q: QTable<String>)
 
     for (i in 0 until epochs)
     {
-        var game = createGame()
+        var game = createGame(size=size)
         while (!game.isFinal())
         {
             val hash = game.hash()
@@ -307,7 +308,7 @@ fun trainTable(epochs: Int, learningRate: Double, q: QTable<String>)
         }
     }
 }
-fun trainNet(epochs: Int, learningRate: Double): Net
+fun trainNet(epochs: Int, learningRate: Double, size: Int): Net
 {
     val random = Random()
     var epsilon = 1.0
@@ -316,13 +317,13 @@ fun trainNet(epochs: Int, learningRate: Double): Net
             .add { s -> Perceptron(s, 164, Sigmoid(), createNormalInitializer(scaleToSize = true)) }
             .add { s -> Perceptron(s, 150, Sigmoid(), createNormalInitializer(scaleToSize = true)) }
             .add { s -> Perceptron(s, 4, Linear(), createNormalInitializer(scaleToSize = true)) }
-            .build(64)
+            .build(size * size * 4)
     val learner = BackpropLearner(net, learningRate)
     val gamma = 0.9
 
     for (i in 0 until epochs)
     {
-        var game = createGame()
+        var game = createGame(size=size)
         while (!game.isFinal())
         {
             var action = random.nextInt(actions.size)
@@ -454,20 +455,22 @@ fun trainNetReplay(epochs: Int, learningRate: Double): Net
 
 fun main(args: Array<String>)
 {
-    val epochs = 2000
+    val epochs = 5000
     val learningRate = 0.02
+    val size = 6
 
-    val brain = trainNet(epochs, learningRate)
+    val brain = trainNet(epochs, learningRate, size)
     Persister().persistNet(brain, Paths.get("qlearning.json"))
+    //val brain = Persister().loadNet(Paths.get("qlearning.json"))
 
-    /*val q = QTable<String>()
-    val brain = trainNet(epochs, learningRate, q)*/
+    /*val brain = QTable<String>()
+    trainTable(epochs, learningRate, brain, size)*/
 
     println("Trained")
 
     while (true)
     {
-        val game = createGame()
+        val game = createGame(size=size)
         game.print()
 
         val points = readLine()!!.split(" ").map { it.toInt() }.toIntArray()
