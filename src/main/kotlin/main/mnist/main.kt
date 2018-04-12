@@ -41,13 +41,6 @@ fun readLabels(path: String): List<DataVector>
         EJMLMatrixFactory().create(label)
     }.toList()
 }
-fun countCorrect(testInputs: List<DataVector>, testLabels: List<DataVector>, net: Net): Int
-{
-    return testInputs.zip(testLabels).count { (input, label) ->
-        val res = net.forward(input)
-        res.argMax() == label.argMax()
-    }
-}
 
 class MnistApp: Application()
 {
@@ -89,7 +82,7 @@ class MnistApp: Application()
                     if (i % 10 == 0)
                     {
                         val loss = net.getLoss(testInput, testLabels)
-                        val correct = countCorrect(testInput, testLabels, net)
+                        val correct = net.countCorrect(testInput, testLabels)
 
                         println("Loss: $loss")
                         println("Correct: $correct")

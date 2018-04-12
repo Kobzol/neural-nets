@@ -31,4 +31,12 @@ class Net(val layers: List<Layer>, val loss: Loss = QuadraticLoss())
         }.sum()
         return this.loss.normalizeLoss(loss, inputs.size)
     }
+
+    fun countCorrect(testInputs: List<DataVector>, testLabels: List<DataVector>): Int
+    {
+        return testInputs.zip(testLabels).count { (input, label) ->
+            val res = this.forward(input)
+            res.argMax() == label.argMax()
+        }
+    }
 }
