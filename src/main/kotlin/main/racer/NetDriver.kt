@@ -17,7 +17,7 @@ class NetDriver(val net: Net): Driver()
         val targetSpeed = output[1]
         val diff = abs(input.speed - targetSpeed)
 
-        if (diff < 0.05)
+        if (diff < 0.005)
         {
             this.acc = 0.5
         }

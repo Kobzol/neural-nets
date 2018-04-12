@@ -67,8 +67,8 @@ class MnistApp: Application()
 
         val thread = object : Thread() {
             override fun run() {
-                val trainInput = readImages("mnist/mnist-train-input.bin").subList(0, 5000)
-                val trainLabels = readLabels("mnist/mnist-train-label.bin").subList(0, 5000)
+                val trainInput = readImages("mnist/mnist-train-input.bin")//.subList(0, 5000)
+                val trainLabels = readLabels("mnist/mnist-train-label.bin")//.subList(0, 5000)
                 val testInput = readImages("mnist/mnist-test-input.bin")
                 val testLabels = readLabels("mnist/mnist-test-label.bin")
 
@@ -77,7 +77,7 @@ class MnistApp: Application()
                         .add { s -> Perceptron(s, 10, Sigmoid(), createNormalInitializer(0.0, 1.0, true)) }
                         .build(784)
 
-                val learner = SGDLearner(net, 0.1, 10)
+                val learner = SGDLearner(net, 0.05, 10)
                 for (i in 0 until 300)
                 {
                     println("Epoch $i")

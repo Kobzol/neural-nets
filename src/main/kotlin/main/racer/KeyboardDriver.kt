@@ -84,7 +84,7 @@ class KeyboardDriver: Driver()
         synchronized(this.mutex, {
             this.drive()
 
-            if (this.collectionOn && this.random.nextDouble() < 0.1)
+            if (this.collectionOn && this.random.nextDouble() < 0.2)
             {
                 this.samples += Sample(input.linearize(), doubleArrayOf(this.wheel, this.targetSpeed))
                 println("COLLECTED")

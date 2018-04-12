@@ -111,14 +111,14 @@ class DriverApp: Application()
     }
 }
 
-fun train(samplePath: String, netPath: String? = null): Net
+fun train(samplePaths: List<String>, netPath: String? = null): Net
 {
-    val samples = SamplePersister().loadSamples(Paths.get("$samplePath.json"))
+    val samples = samplePaths.map { SamplePersister().loadSamples(Paths.get("$it.json")) }
 
-    val rawInputs = samples.map {
-        DriveInput.deserialize(it.input).getTrainedInput()
+    val rawInputs = samples.flatMap {
+        it.map { sample -> DriveInput.deserialize(sample.input).getTrainedInput() }
     }.toList()
-    val rawOutputs = samples.map { it.output }.toList()
+    val rawOutputs = samples.flatMap { it.map { sample -> sample.output } }.toList()
 
     val validIndices = mutableListOf<Int>()
     val map = mutableSetOf<String>()
@@ -136,15 +136,18 @@ fun train(samplePath: String, netPath: String? = null): Net
     val outputs = validIndices.map { toVec(rawOutputs[it]) }
 
     val net = NetBuilder()
-            .add { s -> Perceptron(s, 40, Sigmoid(), createNormalInitializer(scaleToSize = false)) }
-            .add { s -> Perceptron(s, samples[0].output.size, Sigmoid(), createNormalInitializer(scaleToSize = false)) }
+            .add { s -> Perceptron(s, 60, Sigmoid(), createNormalInitializer(scaleToSize = false)) }
+            .add { s -> Perceptron(s, samples[0][0].output.size, Sigmoid(), createNormalInitializer(scaleToSize = false)) }
             .build(inputs[0].numCols())
-    val learner = BackpropLearner(net, 0.01)
+    val learner = SGDLearner(net, 0.05, 64)
 
-    for (i in 0 until 1000)
+    for (i in 0 until 2000)
     {
         learner.learnBatch(inputs, outputs)
-        println("Loss: ${net.getLoss(inputs, outputs)}")
+        if (i % 50 == 0)
+        {
+            println("Loss: ${net.getLoss(inputs, outputs)}")
+        }
     }
 
     if (netPath != null)
@@ -159,7 +162,7 @@ fun main(args: Array<String>)
 {
     if (args[0] == "train")
     {
-        train("samples4", "net-driver")
+        train(listOf("drivers/test1/samples", "samples0"), "net-driver")
     }
     else Application.launch(DriverApp::class.java, *args)
 }

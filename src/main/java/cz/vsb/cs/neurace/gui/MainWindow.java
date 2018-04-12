@@ -99,7 +99,7 @@ public class MainWindow extends JFrame {
 
 		tabbedPane.setSelectedIndex(2);
 		try {
-			setTrack(new Track(new File("src/main/resources/tracks/trat1.ntr")));
+			setTrack(new Track(new File("src/main/resources/tracks/test1.ntr")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

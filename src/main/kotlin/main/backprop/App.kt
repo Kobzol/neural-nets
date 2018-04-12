@@ -10,7 +10,7 @@ import java.nio.file.Paths
 class BackpropApp: Application()
 {
     private val screen: MainScreen = MainScreen(NetXmlParser()
-            .parseBackpropNet(Paths.get("xml/example2D_3.xml")))
+            .parseBackpropNet(Paths.get("xml/example2D_1.xml")))
 
     override fun start(stage: Stage)
     {
