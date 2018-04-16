@@ -13,7 +13,7 @@ class HebbLearner(private val net: Net,
         }
     }
 
-    fun learnSample(input: DataVector, label: DataVector)
+    private fun learnSample(input: DataVector, label: DataVector)
     {
         val layer = this.net.layers[0]
         val output = layer.activation.forward(layer.forward(input))

@@ -60,7 +60,7 @@ class ZooApp: Application()
                         .build(inputs[0].numCols())
                 val learner = SGDLearner(net, 0.05, 10)
 
-                for (e in 0 until 10)
+                for (e in 0 until 100)
                 {
                     for (i in 0 until folds)
                     {
@@ -102,7 +102,7 @@ class ZooApp: Application()
         assert(trainInputs.size + validationInputs.size == inputs.size)
         assert(trainOutputs.size + validationOutputs.size == outputs.size)
 
-        for (i in 0 until 5000)
+        for (i in 0 until 500)
         {
             learner.learnBatch(trainInputs, trainOutputs)
         }

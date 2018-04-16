@@ -46,40 +46,33 @@ class KeyboardDriver: Driver()
     private val accReturn = 0.04
     private val speedScale = 0.001
 
-    private var collectionOn = true
+    private var collectionOn = false
 
     private val random = Random()
-    private var time: Long? = null
-    private var delta: Float = 0.0f
 
     override fun drive(input: DriveInput): DriveResult
     {
-        val current = System.currentTimeMillis()
-        if (this.time != null)
-        {
-            this.delta = (current - this.time!!) / 1000.0f
-        }
-        else
-        {
-            this.time = current
-            return DriveResult(this.wheel, this.acceleration)
-        }
-
         if (input.speed < this.targetSpeed)
         {
             this.acceleration += this.accScale
         }
-        else this.acceleration -= this.accScale
+        else if (input.speed > this.targetSpeed)
+        {
+            this.acceleration -= this.accScale
+        }
+        this.acceleration = this.clampNear(this.acceleration, this.targetSpeed)
         this.acceleration = clamp(this.acceleration, 0.0, 1.0)
 
         if (this.wheel < this.targetWheel)
         {
             this.wheel += this.wheelScale
         }
-        else this.wheel -= this.wheelScale
+        else if (this.wheel > this.targetWheel)
+        {
+            this.wheel -= this.wheelScale
+        }
+        this.wheel = this.clampNear(this.wheel, this.targetWheel)
         this.wheel = clamp(this.wheel, 0.0, 1.0)
-
-        this.time = current
 
         synchronized(this.mutex, {
             this.drive()
@@ -92,6 +85,7 @@ class KeyboardDriver: Driver()
         })
 
         println("W: $targetWheel, S: $targetSpeed")
+        println("W: $wheel, S: $acceleration")
 
         return DriveResult(this.wheel, this.acceleration)
     }
@@ -120,14 +114,9 @@ class KeyboardDriver: Driver()
             }
             else this.returnWheel()
 
-            if (abs(this.targetWheel - 0.5) < 0.005)
+            if (abs(this.targetWheel - 0.5) < 0.01)
             {
                 this.targetWheel = 0.5
-            }
-
-            if (this.targetWheel == 0.5 && (abs(this.wheel - 0.5) < 0.005))
-            {
-                this.wheel = 0.5
             }
 
             if (this.keymap.up || this.keymap.down)
@@ -151,5 +140,10 @@ class KeyboardDriver: Driver()
         {
             this.acceleration = 0.5
         }
+    }
+    private fun clampNear(actual: Double, target: Double): Double
+    {
+        if (abs(actual - target) < 0.005) return target
+        return actual
     }
 }

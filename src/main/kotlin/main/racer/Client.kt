@@ -10,16 +10,13 @@ import javafx.stage.Stage
 import koma.create
 import koma.extensions.map
 import koma.matrix.ejml.EJMLMatrixFactory
-import nn.Net
-import nn.NetBuilder
+import nn.*
 import nn.activation.Linear
 import nn.activation.Sigmoid
-import nn.createNormalInitializer
 import nn.layer.Perceptron
 import nn.learn.BackpropLearner
 import nn.learn.SGDLearner
 import nn.persistence.Persister
-import nn.toVec
 import java.io.File
 import java.nio.file.Paths
 import java.util.*
@@ -65,10 +62,10 @@ class DriverApp: Application()
 
         val thread = object: Thread() {
             override fun run() {
-                val host = "localhost"
-                val port = 9461
-                var raceName = "test"
-                var driverName = "basic_client" + Random().nextInt(1000).toString()
+                val host = "java.cs.vsb.cz"//"localhost"
+                val port = 9460
+                var raceName = "r"
+                var driverName = "ber0134"// + Random().nextInt(1000).toString()
                 var carType: String? = null
                 // kontrola argumentu programu
                 raceConnector = RaceConnector(host, port, null)
@@ -77,7 +74,7 @@ class DriverApp: Application()
                 raceName = raceList[Random().nextInt(raceList.size)]
                 val carList = raceConnector.listCars(raceName)
                 carType = carList[2]//Random().nextInt(carList.size)]
-                driverName += "_" + carType!!
+                driverName += "_" + carType!! + Random().nextInt(1000).toString()
 
                 raceConnector.driver = if (keyboard) driver else netDriver
                 raceConnector.start(raceName, driverName, carType)
@@ -132,12 +129,13 @@ fun train(samplePaths: List<String>, netPath: String? = null): Net
         }
     }
 
-    val inputs = validIndices.map { toVec(rawInputs[it]) }
-    val outputs = validIndices.map { toVec(rawOutputs[it]) }
+    val inputs = validIndices.map { toVec(rawInputs[it]) }.toMutableList()
+    val outputs = validIndices.map { toVec(rawOutputs[it]) }.toMutableList()
 
     val net = NetBuilder()
             .add { s -> Perceptron(s, 60, Sigmoid(), createNormalInitializer(scaleToSize = false)) }
-            .add { s -> Perceptron(s, samples[0][0].output.size, Sigmoid(), createNormalInitializer(scaleToSize = false)) }
+            .add { s -> Perceptron(s, samples[0][0].output.size, Sigmoid(),
+                    createNormalInitializer(scaleToSize = false)) }
             .build(inputs[0].numCols())
     val learner = SGDLearner(net, 0.05, 64)
 
@@ -162,7 +160,7 @@ fun main(args: Array<String>)
 {
     if (args[0] == "train")
     {
-        train(listOf("drivers/test1/samples", "samples0"), "net-driver")
+        train(listOf("drivers/test1/samples", "drivers/topgear/samples"), "net-driver")
     }
     else Application.launch(DriverApp::class.java, *args)
 }
